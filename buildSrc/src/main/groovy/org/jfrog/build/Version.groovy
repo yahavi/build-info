@@ -2,6 +2,7 @@ package org.jfrog.build
 
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+
 import java.text.SimpleDateFormat
 
 class Version {
@@ -14,8 +15,11 @@ class Version {
     }
 
     def Version(Project project, List<String> subProjects) {
-        this.versionNumber = project.getProperty("${project.name}-version")
-        this.release = Boolean.valueOf(project.getProperty("${project.name}-release"))
+        String shortName = project.name
+        int prefixLength = "build-info-".length()
+        if (shortName.length() > prefixLength) shortName = shortName.substring(prefixLength)
+        this.versionNumber = project.getProperty("${shortName}-version")
+        this.release = Boolean.valueOf(project.getProperty("${shortName}-release"))
         File timestampFile = new File(project.buildDir, 'timestamp.txt')
         if (timestampFile.isFile()) {
             boolean uptodate = true

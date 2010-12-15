@@ -135,7 +135,7 @@ project('build-info-extractor-ivy') {
 }
 
 project('build-info-extractor-gradle') {
-    apply plugin: 'build-info-groovy'
+    apply plugin: 'groovy'
 
     version = new Version(project)
     description = 'JFrog Build-Info Gradle Extractor'
