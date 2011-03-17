@@ -36,8 +36,10 @@ public class IvyResolverHelper {
         String type = attributes.get("type");
         String branch = attributes.get("branch");
         String artifactPattern = getPattern(props, artifactFile.getName());
-        return IvyPatternHelper.substitute(artifactPattern, getGroupIdPatternByM2Compatible(props, organization),
-                moduleName, revision, null, type, ext, branch, extraAttributes, null);
+        String orgPattern = getGroupIdPatternByM2Compatible(props, organization);
+        return IvyPatternHelper.substitute(artifactPattern, orgPattern,
+                moduleName, branch, revision, attributes.get("artifact"), type, ext, attributes.get("artifact"), null,
+                extraAttributes, null);
     }
 
     private static String getExt(String path) {
