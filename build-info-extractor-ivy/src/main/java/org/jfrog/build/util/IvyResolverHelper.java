@@ -33,9 +33,9 @@ public class IvyResolverHelper {
         String revision = attributes.get("revision");
         String moduleName = attributes.get("module");
         String ext = attributes.get("ext");
-        String type = attributes.get("type");
         String branch = attributes.get("branch");
-        String artifactPattern = getPattern(props, artifactFile.getName());
+        String type = attributes.get("type");
+        String artifactPattern = getPattern(props, type);
         String orgPattern = getGroupIdPatternByM2Compatible(props, organization);
         return IvyPatternHelper.substitute(artifactPattern, orgPattern,
                 moduleName, branch, revision, attributes.get("artifact"), type, ext, attributes.get("conf"), null,
@@ -47,8 +47,8 @@ public class IvyResolverHelper {
         return path.substring(dot + 1);
     }
 
-    private static String getPattern(Properties props, String fileName) {
-        if (isIvyFileName(fileName)) {
+    private static String getPattern(Properties props, String type) {
+        if (isIvy(type)) {
             return getIvyDescriptorPattern(props);
         } else {
             return getArtifactPattern(props);
@@ -83,13 +83,11 @@ public class IvyResolverHelper {
         return Boolean.parseBoolean(m2Compatible);
     }
 
-    public static boolean isIvyFileName(String fileName) {
-        if (StringUtils.isBlank(fileName)) {
+    public static boolean isIvy(String type) {
+        if (StringUtils.isBlank(type)) {
             return false;
         }
-        return IVY_XML.equals(fileName) || (fileName.startsWith("ivy-") && fileName.endsWith(".xml")) ||
-                fileName.endsWith(".ivy") ||
-                fileName.endsWith("-" + IVY_XML);
+        return "ivy".equals(type);
     }
 
     /**
