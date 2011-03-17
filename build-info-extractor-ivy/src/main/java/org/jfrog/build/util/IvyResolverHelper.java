@@ -38,7 +38,7 @@ public class IvyResolverHelper {
         String artifactPattern = getPattern(props, artifactFile.getName());
         String orgPattern = getGroupIdPatternByM2Compatible(props, organization);
         return IvyPatternHelper.substitute(artifactPattern, orgPattern,
-                moduleName, branch, revision, attributes.get("artifact"), type, ext, attributes.get("artifact"), null,
+                moduleName, branch, revision, attributes.get("artifact"), type, ext, attributes.get("conf"), null,
                 extraAttributes, null);
     }
 
