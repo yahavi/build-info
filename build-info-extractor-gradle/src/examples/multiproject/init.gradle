@@ -15,27 +15,25 @@
  */
 
 initscript {
-  apply {
-    apply from: 'http://localhost:8081/artifactory/plugins-releases/org/jfrog/buildinfo/build-info-extractor-gradle/1.0.0/artifactoryinitplugin-1.0-SNAPSHOT.gradle'
+  dependencies {
+    classpath files('/Users/yoavl/dev/jfrog/build-info.git/build-info-extractor-gradle/build/libs/build-info-extractor-gradle-1.1.x-SNAPSHOT-uber.jar')
   }
 }
-addListener(new PropertyListener())
-class PropertyListener extends BuildAdapter implements BuildListener {
-  def void settingsEvaluated(Settings settings) {
-    Map<String, String> projProps = settings.getStartParameter().getProjectProperties()
-    projProps.putAll([
-            'artifactory.contextUrl': 'http://localhost:8081/artifactory',
-            'artifactory.resolve.repoKey': 'libs-releases',
-            'artifactory.publish.repoKey': 'libs-releases-local',
-            'artifactory.publish.username': 'admin',
-            'artifactory.publish.password': 'password',
-            'artifactory.publish.artifacts': 'true',
-            'artifactory.publish.ivy': 'true',
-            'artifactory.publish.maven': 'true',
-            'buildInfo.parentBuildName': 'parent',
-            'buildInfo.parentBuildNumber': '123',
-            //"buildInfo.buildName": "multiproj-example",
-            //"buildInfo.buildNumber": "1234",
-    ])
+
+addListener(new BuildInfoPluginListener())
+
+class BuildInfoPluginListener extends BuildAdapter {
+
+  def void projectsLoaded(Gradle gradle) {
+    gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))
+    Project root = gradle.getRootProject()
+    root.logger.debug("BuildInfo Artifactory Plugin projectsEvaluated: ${root.name}")
+    if (!"buildSrc".equals(root.name)) {
+      root.allprojects {
+        apply {
+          apply plugin: org.jfrog.build.ArtifactoryPlugin
+        }
+      }
+    }
   }
 }

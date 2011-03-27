@@ -1,22 +1,24 @@
 initscript {
-    dependencies {
-        classpath fileTree('${pluginLibDir}')
-    }
+  dependencies {
+    classpath files('/Users/yoavl/dev/jfrog/build-info.git/build-info-extractor-gradle/build/libs/build-info-extractor-gradle-1.1.x-SNAPSHOT-uber.jar')
+    //classpath fileTree('${pluginLibDir}')
+  }
 }
 
 addListener(new BuildInfoPluginListener())
+
 class BuildInfoPluginListener extends BuildAdapter {
 
-    def void projectsLoaded(Gradle gradle) {
-        gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))
-        Project root = gradle.getRootProject()
-        root.logger.debug("BuildInfo Artifactory Plugin projectsEvaluated: ${root.name}")
-        if (!"buildSrc".equals(root.name)) {
-            root.allprojects {
-                apply {
-                    apply plugin: org.jfrog.build.ArtifactoryPlugin
-                }
-            }
+  def void projectsLoaded(Gradle gradle) {
+    gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))
+    Project root = gradle.getRootProject()
+    root.logger.debug("BuildInfo Artifactory Plugin projectsEvaluated: ${root.name}")
+    if (!"buildSrc".equals(root.name)) {
+      root.allprojects {
+        apply {
+          apply plugin: org.jfrog.build.ArtifactoryPlugin
         }
+      }
     }
+  }
 }

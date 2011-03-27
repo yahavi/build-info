@@ -1,0 +1,11 @@
+build
+.gradle
+build-info.iml
+build-info.ipr
+build-info.iws
+build-info-api/build-info-api.iml
+build-info-client/build-info-client.iml
+build-info-extractor-gradle/build-info-extractor-gradle.iml
+build-info-extractor-ivy/build-info-extractor-ivy.iml
+build-info-extractor-maven3/build-info-extractor-maven3.iml
+build-info-extractor/build-info-extractor.iml
