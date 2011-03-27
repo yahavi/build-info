@@ -26,7 +26,7 @@ public class PromotionBuilderTest {
         assertNull(promotion.getTargetRepo(), "Unexpected default target repo.");
         assertFalse(promotion.isCopy(), "Unexpected default copy state.");
         assertTrue(promotion.isArtifacts(), "Unexpected default artifacts state.");
-        assertTrue(promotion.isDependencies(), "Unexpected default dependencies state.");
+        assertFalse(promotion.isDependencies(), "Unexpected default dependencies state.");
         assertNull(promotion.getScopes(), "Unexpected default scopes.");
         assertNull(promotion.getProperties(), "Unexpected default properties.");
     }
@@ -36,8 +36,8 @@ public class PromotionBuilderTest {
         Multimap<String, String> properties = HashMultimap.create();
 
         Promotion promotion = new PromotionBuilder().status(Promotion.ROLLED_BACK).comment("comment").ciUser("ciUser").
-                artifactoryUser("artifactoryUser").timestamp("timestamp").dryRun(true).targetRepo("targetRepo").
-                copy(false).artifacts(true).dependencies(false).scopes(scopes).properties(properties).build();
+                timestamp("timestamp").dryRun(true).targetRepo("targetRepo").copy(false).artifacts(true).
+                dependencies(false).scopes(scopes).properties(properties).build();
 
         assertEquals(promotion.getStatus(), Promotion.ROLLED_BACK, "Unexpected status.");
         assertEquals(promotion.getComment(), "comment", "Unexpected comment.");

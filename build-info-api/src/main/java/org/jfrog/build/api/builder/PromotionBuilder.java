@@ -23,7 +23,7 @@ public class PromotionBuilder {
     private String targetRepo;
     private boolean copy;
     private boolean artifacts = true;
-    private boolean dependencies = true;
+    private boolean dependencies = false;
     private Set<String> scopes;
     private Multimap<String, String> properties;
 
@@ -42,10 +42,6 @@ public class PromotionBuilder {
 
     public PromotionBuilder ciUser(String ciUser) {
         this.ciUser = ciUser;
-        return this;
-    }
-
-    public PromotionBuilder artifactoryUser(String artifactoryUser) {
         return this;
     }
 
