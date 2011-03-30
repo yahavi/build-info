@@ -1,4 +1,4 @@
-build
+/build
 .gradle
 build-info.iml
 build-info.ipr

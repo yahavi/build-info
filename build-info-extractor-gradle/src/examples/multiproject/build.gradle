@@ -35,32 +35,42 @@
 }*/
 
 allprojects {
-  /*apply {
-      apply plugin: 'maven'
-      apply plugin: 'artifactoryplugin'
-  }*/
-  group = 'org.gradle'
-  version = '1.0'
+    /*apply {
+        apply plugin: 'maven'
+        apply plugin: 'artifactoryplugin'
+    }*/
+    group = 'org.gradle'
+    version = '1.0'
 }
 
 subprojects {
-  apply {
-    apply plugin: 'java'
-  }
+    apply {
+        apply plugin: 'java'
+    }
 
-  dependencies {
-    testCompile 'junit:junit:4.7'
-  }
-  //manifest.mainAttributes(provider: 'gradle')
+    dependencies {
+        testCompile 'junit:junit:4.7'
+    }
+    //manifest.mainAttributes(provider: 'gradle')
 }
 
 dependsOnChildren()
 
+repositories {
+    mavenRepo name: 'plugins-repo', urls: 'http://should-not-be-here'
+}
+
 artifactory {
-  publish {
-    repository {
-      url = "http://www.crapworld.com"
+    publish {
+        repository {
+            url = 'http://publish'
+        }
+        buildInfo = true
     }
-    buildInfo = true
-  }
+    resolve {
+        repository {
+            url = 'http://resolve'
+        }
+        //exclusive: true
+    }
 }

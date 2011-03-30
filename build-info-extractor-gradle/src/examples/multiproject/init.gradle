@@ -1,39 +1,48 @@
+import org.jfrog.build.ArtifactoryPluginInfo
+
 /*
- * Copyright (C) 2010 JFrog Ltd.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright (C) 2010 JFrog Ltd.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 initscript {
-  dependencies {
-    classpath files('/Users/yoavl/dev/jfrog/build-info.git/build-info-extractor-gradle/build/libs/build-info-extractor-gradle-1.1.x-SNAPSHOT-uber.jar')
-  }
+    dependencies {
+        classpath files('/Users/yoavl/dev/jfrog/build-info.git/build-info-extractor-gradle/build/libs/build-info-extractor-gradle-1.1.x-SNAPSHOT-uber.jar')
+    }
 }
 
-addListener(new BuildInfoPluginListener())
+addListener(new ArtifactoryPluginListener())
 
-class BuildInfoPluginListener extends BuildAdapter {
+class ArtifactoryPluginListener extends BuildAdapter {
 
-  def void projectsLoaded(Gradle gradle) {
-    gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))
-    Project root = gradle.getRootProject()
-    root.logger.debug("BuildInfo Artifactory Plugin projectsEvaluated: ${root.name}")
-    if (!"buildSrc".equals(root.name)) {
-      root.allprojects {
-        apply {
-          apply plugin: org.jfrog.build.ArtifactoryPlugin
-        }
-      }
+    void projectsLoaded(Gradle gradle) {
+        Project root = gradle.getRootProject()
+        root.logger.debug("BuildInfo Artifactory Plugin projectsLoaded: ${root.name}")
+        root.convention.plugins.artifactory = new ArtifactoryPluginInfo()
     }
-  }
+
+    void projectsEvaluated(Gradle gradle) {
+        gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))
+        Project root = gradle.getRootProject()
+        root.logger.debug("BuildInfo Artifactory Plugin projectsEvaluated: ${root.name}")
+        if (!"buildSrc".equals(root.name)) {
+            root.allprojects {
+                println("@@@@ ${delegate.name}")
+                apply plugin: org.jfrog.build.ArtifactoryPlugin
+            }
+        }
+        //root.repositories = root.createRepositoryHandler()
+        println("### BuildInfo Artifactory Plugin projectsEvaluated: ${root.repositories.getAll()}")
+    }
 }
