@@ -174,7 +174,7 @@ class ArtifactoryPlugin implements Plugin<Project> {
             Upload installTask = tasks.withType(Upload.class).findByName('install')
             if (installTask == null) {
                 throw new GradleException("""Cannot publish Maven descriptor if mavenDescriptor not set in task: ${buildInfoTask.path}
-                    And default install task for project ${project.path} is not an Upload task""")
+                and no Maven plugin 'install' task is defined for the project '${project.path}'.""")
             }
             buildInfoTask.mavenDescriptor = new File(project.getRepositories().getMavenPomDir(), "pom-default.xml")
             buildInfoTask.dependsOn(installTask)
