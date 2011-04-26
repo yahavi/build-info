@@ -195,16 +195,13 @@ public class GradleBuildInfoExtractor implements BuildInfoExtractor<Project, Bui
 
 
     public Module extractModule(Project project) {
-        String projectName = project.getName();
+        String artifactName = project.getName();
         BuildInfoRecorderTask task = getBuildInfoRecorderTask(project);
         if (task != null) {
-            String artifactName = task.getArtifactName();
-            if (StringUtils.isNotBlank(artifactName)) {
-                projectName = clientConf.info.getBuildName();
-            }
+            artifactName = task.getArtifactName();
         }
         ModuleBuilder builder = new ModuleBuilder()
-                .id(project.getGroup() + ":" + projectName + ":" + project.getVersion().toString());
+                .id(project.getGroup() + ":" + artifactName + ":" + project.getVersion().toString());
         try {
             builder.artifacts(calculateArtifacts(project))
                     .dependencies(calculateDependencies(project));
