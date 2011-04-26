@@ -237,8 +237,7 @@ public class GradleBuildInfoExtractor implements BuildInfoExtractor<Project, Bui
     }
 
     private List<Dependency> calculateDependencies(Project project) throws Exception {
-        BuildInfoRecorderTask buildInfoRecorderTask = getBuildInfoRecorderTask(project);
-        Set<Configuration> configurationSet = buildInfoRecorderTask.getPublishConfigurations();
+        Set<Configuration> configurationSet = project.getConfigurations().getAll();
         List<Dependency> dependencies = newArrayList();
         for (Configuration configuration : configurationSet) {
             ResolvedConfiguration resolvedConfiguration = configuration.getResolvedConfiguration();
