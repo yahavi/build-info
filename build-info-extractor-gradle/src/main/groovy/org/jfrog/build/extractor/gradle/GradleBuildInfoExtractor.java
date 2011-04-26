@@ -24,6 +24,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.PublishArtifact;
+import org.gradle.api.artifacts.ResolveException;
 import org.gradle.api.artifacts.ResolvedArtifact;
 import org.gradle.api.artifacts.ResolvedConfiguration;
 import org.gradle.api.artifacts.ResolvedDependency;
@@ -241,7 +242,13 @@ public class GradleBuildInfoExtractor implements BuildInfoExtractor<Project, Bui
         List<Dependency> dependencies = newArrayList();
         for (Configuration configuration : configurationSet) {
             ResolvedConfiguration resolvedConfiguration = configuration.getResolvedConfiguration();
-            Set<ResolvedArtifact> resolvedArtifactSet = resolvedConfiguration.getResolvedArtifacts();
+            Set<ResolvedArtifact> resolvedArtifactSet = null;
+            try {
+                resolvedArtifactSet = resolvedConfiguration.getResolvedArtifacts();
+            } catch (ResolveException e) {
+                log.debug("Artifacts for configuration '{}' were not all resolved, skipping", configuration.getName());
+                continue;
+            }
             for (final ResolvedArtifact artifact : resolvedArtifactSet) {
                 ResolvedDependency resolvedDependency = artifact.getResolvedDependency();
                 /**
