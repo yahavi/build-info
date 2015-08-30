@@ -45,6 +45,7 @@ import org.jfrog.build.extractor.BuildInfoExtractor;
 import org.jfrog.build.extractor.BuildInfoExtractorUtils;
 import org.jfrog.build.extractor.maven.resolver.ResolutionHelper;
 import org.xml.sax.InputSource;
+
 import javax.xml.xpath.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,7 +102,8 @@ public class BuildInfoRecorder extends AbstractExecutionListener implements Buil
     /**
      * The repository listeners (either ArtifactoryEclipseRepositoryListener or ArtifactorySonatypeRepositoryListener) invoke this method
      * with each artifact being resolved by Maven.
-     * @param artifact  The artifact being resolved by Maven.
+     *
+     * @param artifact The artifact being resolved by Maven.
      */
     public void artifactResolved(Artifact artifact) {
         if (artifact != null) {
@@ -406,13 +408,14 @@ public class BuildInfoRecorder extends AbstractExecutionListener implements Buil
 
     /**
      * Merge the dependencies taken from the MavenProject object with those collected inside the resolvedArtifacts collection.
-     * @param projectDependencies   The artifacts taken from the MavenProject object.
+     *
+     * @param projectDependencies The artifacts taken from the MavenProject object.
      */
     private void mergeProjectDependencies(Set<Artifact> projectDependencies) {
         // Go over all the artifacts taken from the MavenProject object, and replace their equals method, so that we are
         // able to merge them together with the artifacts inside the resolvedArtifacts set:
         Set<Artifact> dependecies = Sets.newHashSet();
-        for(Artifact artifact : projectDependencies) {
+        for (Artifact artifact : projectDependencies) {
             String classifier = artifact.getClassifier();
             classifier = classifier == null ? "" : classifier;
             DefaultArtifact art = new DefaultArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
@@ -600,11 +603,13 @@ public class BuildInfoRecorder extends AbstractExecutionListener implements Buil
 
     private String getExtension(File depFile) {
         String extension = "";
-        String fileName = depFile.getName();
-        if (depFile != null && fileName != null) {
-            int lastDot = fileName.lastIndexOf('.');
-            if (lastDot > 0 && lastDot + 1 < fileName.length()) {
-                extension = fileName.substring(lastDot + 1);
+        if (depFile != null) {
+            String fileName = depFile.getName();
+            if (fileName != null) {
+                int lastDot = fileName.lastIndexOf('.');
+                if (lastDot > 0 && lastDot + 1 < fileName.length()) {
+                    extension = fileName.substring(lastDot + 1);
+                }
             }
         }
         return extension;
