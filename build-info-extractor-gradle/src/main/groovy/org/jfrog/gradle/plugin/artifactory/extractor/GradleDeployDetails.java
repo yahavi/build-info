@@ -25,7 +25,7 @@ import org.jfrog.build.client.DeployDetails;
  *
  * @author Tomer Cohen
  */
-public class GradleDeployDetails {
+public class GradleDeployDetails implements Comparable<GradleDeployDetails> {
 
     private final DeployDetails deployDetails;
     private final PublishArtifactInfo publishArtifact;
@@ -47,5 +47,52 @@ public class GradleDeployDetails {
 
     public PublishArtifactInfo getPublishArtifact() {
         return publishArtifact;
+    }
+    
+    public int compareTo(GradleDeployDetails that) {
+        int result = 0;
+        if (this.deployDetails == null) {
+            result = that.deployDetails == null ? 0 : -1;
+        } else {
+            result = this.deployDetails.compareTo(that.deployDetails);
+        }
+        if (result == 0) {
+            if (this.publishArtifact == null) {
+                result = that.publishArtifact == null ? 0 : -1;
+            } else {
+                result = this.publishArtifact.compareTo(that.publishArtifact);
+            }
+        }
+        if (result == 0) {
+            if (this.project == null) {
+                result = that.project == null ? 0 : -1;
+            } else {
+                result = this.project.compareTo(that.project);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GradleDeployDetails that = (GradleDeployDetails) o;
+
+        if (deployDetails != null ? !deployDetails.equals(that.deployDetails) : that.deployDetails != null)
+            return false;
+        if (publishArtifact != null ? !publishArtifact.equals(that.publishArtifact) : that.publishArtifact != null)
+            return false;
+        return !(project != null ? !project.equals(that.project) : that.project != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = deployDetails != null ? deployDetails.hashCode() : 0;
+        result = 31 * result + (publishArtifact != null ? publishArtifact.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
+        return result;
     }
 }
