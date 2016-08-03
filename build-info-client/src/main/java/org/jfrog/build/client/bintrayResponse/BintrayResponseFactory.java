@@ -1,6 +1,7 @@
 package org.jfrog.build.client.bintrayResponse;
 
-import org.codehaus.jackson.JsonParser;
+
+import com.fasterxml.jackson.core.JsonParser;
 
 import java.io.IOException;
 
