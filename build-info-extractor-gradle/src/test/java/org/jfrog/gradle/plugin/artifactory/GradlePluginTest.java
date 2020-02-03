@@ -57,7 +57,7 @@ public class GradlePluginTest extends IntegrationTestsBase {
         return GradleRunner.create()
                 .withGradleVersion(gradleVersion)
                 .withProjectDir(projectDir)
-                .withPluginClasspath(Arrays.asList(Paths.get(".").toAbsolutePath().getParent().resolve("src/main/groovy/org/jfrog/gradle/plugin/artifactory").toFile()))
+                .withPluginClasspath()
                 .withArguments(arguments)
                 .build();
     }
