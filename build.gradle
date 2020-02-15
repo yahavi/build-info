@@ -350,6 +350,7 @@ project('build-info-extractor-gradle') {
         }
         testCompile(group: 'net.java.dev.jna', name: 'jna', version: '3.2.2')
         testCompile project(':build-info-extractor').sourceSets.test.output
+        testImplementation gradleTestKit()
     }
 
     configure(install.repositories.mavenInstaller) {
@@ -359,6 +360,9 @@ project('build-info-extractor-gradle') {
                 url 'http://issues.jfrog.org/jira/browse/GAP'
             }
         }
+    }
+    gradlePlugin {
+        testSourceSets sourceSets.integrationTest
     }
 }
 
