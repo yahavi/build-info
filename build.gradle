@@ -338,6 +338,19 @@ project('build-info-extractor-gradle') {
     description = 'JFrog Build-Info Gradle Extractor'
 
     println description
+
+    sourceSets {
+        test {
+            java.srcDir file('src/test/java')
+
+            resources {
+                srcDir file('build/pluginUnderTestMetadata')
+            }
+            compileClasspath += sourceSets.main.output + configurations.testRuntime
+            runtimeClasspath += output + compileClasspath
+        }
+    }
+
     dependencies {
         compile gradleApi()
         compile fileTree(dir: "${gradle.gradleHomeDir}/lib/plugins", include: '**/*.jar') //workaround for GRADLE-1699
@@ -362,7 +375,7 @@ project('build-info-extractor-gradle') {
         }
     }
     gradlePlugin {
-        testSourceSets sourceSets.integrationTest
+        testSourceSets sourceSets.test
     }
 }
 
