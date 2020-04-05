@@ -377,6 +377,8 @@ project('build-info-extractor-gradle') {
     gradlePlugin {
         testSourceSets sourceSets.test
     }
+
+    tasks.test.dependsOn("pluginUnderTestMetadata")
 }
 
 project('build-info-extractor-maven3') {
