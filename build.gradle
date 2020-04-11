@@ -359,7 +359,7 @@ project('build-info-extractor-gradle') {
         uberJar group: 'org.apache.ivy', name: 'ivy', version: '2.2.0'
         compile localGroovy()
         testCompile project(':build-info-extractor').sourceSets.test.output
-        testImplementation gradleTestKit()
+        testCompile gradleTestKit()
     }
 
     configure(install.repositories.mavenInstaller) {
@@ -374,7 +374,10 @@ project('build-info-extractor-gradle') {
         testSourceSets sourceSets.test
     }
 
+    // Generate "build/pluginUnderTestMetadata/plugin-under-test-metadata.properties"
     tasks.test.dependsOn("pluginUnderTestMetadata")
+    // Generate "build/libs/*"
+    tasks.test.dependsOn("assemble")
 }
 
 project('build-info-extractor-maven3') {
