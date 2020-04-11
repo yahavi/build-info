@@ -86,21 +86,25 @@ public abstract class IntegrationTestsBase {
         buildInfoClientBuilder = createBuildInfoClientBuilder();
         dependenciesClient = createDependenciesClient();
 
-        createTestRepo(localRepo);
-        if (StringUtils.isNotBlank(remoteRepo)) {
-            createTestRepo(remoteRepo);
+        if (!dependenciesClient.isArtifactoryOSS()) {
+            createTestRepo(localRepo);
+            if (StringUtils.isNotBlank(remoteRepo)) {
+                createTestRepo(remoteRepo);
+            }
+            createTestRepo(virtualRepo);
         }
-        createTestRepo(virtualRepo);
     }
 
     @AfterClass
     protected void terminate() throws IOException {
-        // Delete the virtual first.
-        deleteTestRepo(virtualRepo);
-        if (StringUtils.isNotBlank(remoteRepo)) {
-            deleteTestRepo(remoteRepo);
+        if (!dependenciesClient.isArtifactoryOSS()) {
+            // Delete the virtual first.
+            deleteTestRepo(virtualRepo);
+            if (StringUtils.isNotBlank(remoteRepo)) {
+                deleteTestRepo(remoteRepo);
+            }
+            deleteTestRepo(localRepo);
         }
-        deleteTestRepo(localRepo);
         preemptiveHttpClient.close();
         buildInfoClient.close();
         dependenciesClient.close();
