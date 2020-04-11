@@ -12,7 +12,13 @@ allprojects {
     version = currentVersion
     status = 'Integration'
     repositories {
-        jcenter()
+        maven {
+            url "${System.env.BITESTS_ARTIFACTORY_URL}/${System.env.BITESTS_ARTIFACTORY_VIRTUAL_REPO}"
+            credentials {
+                username "${System.env.BITESTS_ARTIFACTORY_USERNAME}"
+                password "${System.env.BITESTS_ARTIFACTORY_PASSWORD}"
+            }
+        }
     }
 }
 
