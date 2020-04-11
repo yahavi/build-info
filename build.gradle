@@ -351,11 +351,6 @@ project('build-info-extractor-gradle') {
         }
     }
 
-    test {
-        useTestNG()
-        maxParallelForks = 1
-    }
-
     dependencies {
         compile gradleApi()
         compile fileTree(dir: "${gradle.gradleHomeDir}/lib/plugins", include: '**/*.jar') //workaround for GRADLE-1699
