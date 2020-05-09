@@ -125,6 +125,11 @@ public class ProjectsEvaluatedBuildListener extends BuildAdapter implements Proj
     private void addDefaultPublicationsOrConfigurations(ArtifactoryTask artifactoryTask) {
         PublishingExtension publishingExtension = (PublishingExtension) artifactoryTask.project.extensions.findByName('publishing')
         if (publishingExtension != null) {
+            if (!publishingExtension.getPublications().isEmpty()) {
+                // If there are already defined publication, add them instead of 'mavenJava' and 'ivyJava'
+                artifactoryTask.publications(publishingExtension.getPublications().toArray())
+                return
+            }
             addMavenJavaPublication(publishingExtension, artifactoryTask.project)
             addIvyJavaPublication(publishingExtension, artifactoryTask.project)
             artifactoryTask.addDefaultPublications()
