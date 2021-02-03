@@ -38,6 +38,7 @@ import static org.jfrog.gradle.plugin.artifactory.task.DistributeBuildTask.DISTR
 abstract class ArtifactoryPluginBase implements Plugin<Project> {
     private static final Logger log = LoggerFactory.getLogger(ArtifactoryPluginBase.class)
     public static final String PUBLISH_TASK_GROUP = "publishing"
+    private ArtifactoryDependencyResolutionListener artifactoryDependencyResolutionListener
 
     void apply(Project project) {
         if ("buildSrc".equals(project.name)) {
@@ -65,7 +66,9 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
         log.debug("Using Artifactory Plugin for ${project.path}")
 
         project.gradle.addProjectEvaluationListener(new ProjectsEvaluatedBuildListener())
-        project.getGradle().addListener(new ArtifactoryDependencyResolutionListener())
+
+        artifactoryDependencyResolutionListener = new ArtifactoryDependencyResolutionListener()
+        project.getGradle().addListener(artifactoryDependencyResolutionListener)
     }
 
     protected abstract ArtifactoryTask createArtifactoryPublishTask(Project project)
@@ -73,6 +76,10 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
     protected abstract ArtifactoryPluginConvention createArtifactoryPluginConvention(Project project)
     protected abstract DeployTask createArtifactoryDeployTask(Project project);
     protected abstract ExtractModuleTask createExtractModuleTask(Project project);
+
+    ArtifactoryDependencyResolutionListener getArtifactoryDependencyResolutionListener() {
+        return artifactoryDependencyResolutionListener
+    }
 
     /**
      *  Set the plugin convention closure object

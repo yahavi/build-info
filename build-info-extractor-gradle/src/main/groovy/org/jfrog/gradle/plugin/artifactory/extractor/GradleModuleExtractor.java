@@ -23,7 +23,9 @@ import org.jfrog.build.extractor.clientConfiguration.ArtifactoryClientConfigurat
 import org.jfrog.build.extractor.clientConfiguration.IncludeExcludePatterns;
 import org.jfrog.build.extractor.clientConfiguration.PatternMatcher;
 import org.jfrog.build.extractor.clientConfiguration.deploy.DeployDetails;
+import org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin;
 import org.jfrog.gradle.plugin.artifactory.ArtifactoryPluginUtil;
+import org.jfrog.gradle.plugin.artifactory.extractor.listener.ArtifactoryDependencyResolutionListener;
 import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask;
 
 import javax.annotation.Nullable;
@@ -49,6 +51,9 @@ public class GradleModuleExtractor implements ModuleExtractor<Project> {
 
     @Override
     public Module extractModule(Project project) {
+        ArtifactoryDependencyResolutionListener artifactoryDependencyResolutionListener =
+                project.getPlugins().getPlugin(ArtifactoryPlugin.class).getArtifactoryDependencyResolutionListener();
+
         Set<GradleDeployDetails> gradleDeployDetails = Sets.newHashSet();
         String artifactName = project.getName();
         ArtifactoryTask artifactoryTask = ProjectUtils.getBuildInfoTask(project);
