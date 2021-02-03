@@ -20,6 +20,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
+import org.jfrog.gradle.plugin.artifactory.extractor.listener.ArtifactoryDependencyResolutionListener
 import org.jfrog.gradle.plugin.artifactory.extractor.listener.ProjectsEvaluatedBuildListener
 import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask
 import org.jfrog.gradle.plugin.artifactory.task.DistributeBuildTask
@@ -64,6 +65,7 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
         log.debug("Using Artifactory Plugin for ${project.path}")
 
         project.gradle.addProjectEvaluationListener(new ProjectsEvaluatedBuildListener())
+        project.getGradle().addListener(new ArtifactoryDependencyResolutionListener())
     }
 
     protected abstract ArtifactoryTask createArtifactoryPublishTask(Project project)
