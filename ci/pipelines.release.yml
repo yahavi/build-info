@@ -18,6 +18,7 @@ pipelines:
           integrations:
             - name: jfrog
             - name: yahav_github
+            - name: mvn_central
         execution:
           onStart:
             - restore_cache_files gradle_cache $res_biReleaseYahavGit_resourcePath/.gradle
@@ -32,7 +33,7 @@ pipelines:
             - export NEXT_DEVELOPMENT_VERSION=2.2.2
 
             # Configure git
-            - git checkout master
+            - git checkout test-pipelines
             - git remote set-url origin https://$int_yahav_github_generic_token@yahav_github.com/jfrog/build-info.git
 
             # Configure JFrog CLI
