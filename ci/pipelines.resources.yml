@@ -1,6 +1,6 @@
 resources:
 
-  - name: biReleaseGit
+  - name: biReleaseYahavGit
     type: GitRepo
     configuration:
       path: yahavi/build-info

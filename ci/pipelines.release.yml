@@ -1,5 +1,5 @@
 pipelines:
-  - name: build_bi
+  - name: build_bi_yahav
     configuration:
       runtime:
         type: image
@@ -20,15 +20,15 @@ pipelines:
         type: Bash
         configuration:
           inputResources:
-            - name: biReleaseGit
+            - name: biReleaseYahavGit
           integrations:
             - name: jfrog
             - name: yahav_github
         execution:
           onStart:
-            - restore_cache_files gradle_cache $res_biReleaseGit_resourcePath/.gradle
+            - restore_cache_files gradle_cache $res_biReleaseYahavGit_resourcePath/.gradle
           onExecute:
-            - cd $res_biReleaseGit_resourcePath
+            - cd $res_biReleaseYahavGit_resourcePath
 
             # Set env
             - export CI=true
@@ -63,4 +63,4 @@ pipelines:
 
           onComplete:
             # Save .m2 cache
-            - add_cache_files $res_biReleaseGit_resourcePath/.gradle gradle_cache
+            - add_cache_files $res_biReleaseYahavGit_resourcePath/.gradle gradle_cache
