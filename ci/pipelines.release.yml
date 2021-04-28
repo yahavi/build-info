@@ -22,9 +22,8 @@ pipelines:
           inputResources:
             - name: biReleaseGit
           integrations:
-            - name: ojo
-            - name: github_generic
-            - name: mvn_central
+            - name: jfrog
+            - name: yahav_github
         execution:
           onStart:
             - restore_cache_files gradle_cache $res_biReleaseGit_resourcePath/.gradle
@@ -38,7 +37,7 @@ pipelines:
 
             # Configure git
             - git checkout master
-            - git remote set-url origin https://$int_github_generic_token@github.com/jfrog/build-info.git
+            - git remote set-url origin https://$int_yahav_github_generic_token@yahav_github.com/jfrog/build-info.git
 
             # Make sure versions provided
             - echo "Checking variables"
@@ -49,18 +48,10 @@ pipelines:
 
             # Configure JFrog CLI
             - curl -fL https://getcli.jfrog.io | sh && chmod +x jfrog
-            - ./jfrog c add ojo --artifactory-url $int_ojo_rt_url --access-token=$int_ojo_rt_token
+            - ./jfrog c add jfrog --artifactory-url $int_jfrog_rt_url --user=$int_jfrog_rt_user --password=$int_jfrog_rt_password
             - ./jfrog rt gradlec --use-wrapper --uses-plugin
-              --server-id-resolve ojo --repo-resolve remote-repos
-              --server-id-deploy ojo --repo-deploy oss-release-local
-
-            # Update version
-            - sed -i -e "/build-info-version=/ s/=.*/=$NEXT_VERSION/" -e "/build-info-extractor-gradle-version=/ s/=.*/=$NEXT_GRADLE_VERSION/" gradle.properties
-            - git commit -am "[artifactory-release] Release version ${NEXT_VERSION} [skipRun]" --allow-empty
-            - git tag build-info-extractor-${NEXT_VERSION}
-            - git tag build-info-gradle-extractor-${NEXT_GRADLE_VERSION}
-            - git push
-            - git push --tags
+              --server-id-resolve jfrog --repo-resolve remote-repos
+              --server-id-deploy jfrog --repo-deploy oss-release-local
 
             # Run install and publish
             - >
@@ -69,21 +60,6 @@ pipelines:
               ./jfrog rt gradle clean aP -x test
             - ./jfrog rt bag
             - ./jfrog rt bp
-
-            # Publish to Maven Central
-            - >
-              ORG_GRADLE_PROJECT_sonatypeUsername=$int_mvn_central_user
-              ORG_GRADLE_PROJECT_sonatypePassword=$int_mvn_central_password
-              ORG_GRADLE_PROJECT_signingKey=$int_mvn_central_signingKey
-              ORG_GRADLE_PROJECT_signingPassword=$int_mvn_central_signingPassword
-              ./gradlew clean build publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
-
-            # Update next development version
-            - sed -i -e "/build-info-version=/ s/=.*/=$NEXT_DEVELOPMENT_VERSION/" -e "/build-info-extractor-gradle-version=/ s/=.*/=$NEXT_GRADLE_DEVELOPMENT_VERSION/" gradle.properties
-            - git commit -am "[artifactory-release] Next development version [skipRun]"
-
-            # Push changes
-            - git push
 
           onComplete:
             # Save .m2 cache
