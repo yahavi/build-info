@@ -7,3 +7,5 @@ resources:
       gitProvider: yahav_github
       buildOn:
         commit: false
+      branches:
+        include: test-pipelines
