@@ -22,7 +22,6 @@ import org.jfrog.build.extractor.clientConfiguration.client.ManagerBase;
 import org.jfrog.build.extractor.clientConfiguration.client.RepositoryType;
 import org.jfrog.build.extractor.clientConfiguration.client.artifactory.services.*;
 import org.jfrog.build.extractor.clientConfiguration.deploy.DeployDetails;
-import org.jfrog.build.extractor.clientConfiguration.util.DeploymentUrlUtils;
 import org.jfrog.build.extractor.usageReport.UsageReporter;
 
 import java.io.File;

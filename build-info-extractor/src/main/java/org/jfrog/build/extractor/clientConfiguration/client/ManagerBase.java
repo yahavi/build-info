@@ -6,6 +6,7 @@ import org.jfrog.build.client.JFrogHttpClient;
 import org.jfrog.build.client.ProxyConfiguration;
 
 import javax.net.ssl.SSLContext;
+import java.io.IOException;
 
 public abstract class ManagerBase implements AutoCloseable {
     protected final JFrogHttpClient jfrogHttpClient;
@@ -100,4 +101,6 @@ public abstract class ManagerBase implements AutoCloseable {
             jfrogHttpClient.close();
         }
     }
+
+    public abstract org.jfrog.build.client.Version getVersion() throws IOException;
 }
