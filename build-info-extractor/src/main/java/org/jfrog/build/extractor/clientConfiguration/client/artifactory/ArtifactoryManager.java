@@ -16,13 +16,13 @@ import org.jfrog.build.api.search.AqlSearchResult;
 import org.jfrog.build.api.util.Log;
 import org.jfrog.build.client.ArtifactoryUploadResponse;
 import org.jfrog.build.client.ArtifactoryVersion;
+import org.jfrog.build.client.DownloadResponse;
 import org.jfrog.build.client.ItemLastModified;
 import org.jfrog.build.client.artifactoryXrayResponse.ArtifactoryXrayResponse;
 import org.jfrog.build.extractor.clientConfiguration.client.ManagerBase;
 import org.jfrog.build.extractor.clientConfiguration.client.RepositoryType;
 import org.jfrog.build.extractor.clientConfiguration.client.artifactory.services.*;
 import org.jfrog.build.extractor.clientConfiguration.deploy.DeployDetails;
-import org.jfrog.build.extractor.clientConfiguration.util.DeploymentUrlUtils;
 import org.jfrog.build.extractor.usageReport.UsageReporter;
 
 import java.io.File;
@@ -83,11 +83,11 @@ public class ArtifactoryManager extends ManagerBase {
         distributeBuildService.execute(jfrogHttpClient);
     }
 
-    public String download(String downloadFrom) throws IOException {
+    public DownloadResponse download(String downloadFrom) throws IOException {
         return download(downloadFrom, null);
     }
 
-    public String download(String downloadFrom, Map<String, String> headers) throws IOException {
+    public DownloadResponse download(String downloadFrom, Map<String, String> headers) throws IOException {
         Download downloadService = new Download(downloadFrom, headers, log);
         return downloadService.execute(jfrogHttpClient);
     }
