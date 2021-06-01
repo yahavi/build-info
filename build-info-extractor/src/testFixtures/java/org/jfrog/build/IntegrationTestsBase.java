@@ -237,7 +237,7 @@ public abstract class IntegrationTestsBase {
 
     private ArtifactoryManagerBuilder createArtifactoryManagerBuilder() {
         ArtifactoryManagerBuilder builder = new ArtifactoryManagerBuilder();
-        return builder.setArtifactoryUrl(url).setUsername(username).setPassword(password).setLog(log);
+        return builder.setServerUrl(url).setUsername(username).setPassword(password).setLog(log);
     }
 
     /**
