@@ -10,32 +10,34 @@ public class ReleaseBundleCreate implements Serializable {
     private Log log;
     private String spec;
     private String name;
-    private String repo;
-    private boolean sign;
     private boolean dryRun;
     private String version;
-    private String passphrase;
+    private String description;
     private boolean insecureTls;
+    private String gpgPassphrase;
     private String releaseNotePath;
+    private boolean signImmediately;
+    private String storingRepository;
     private ReleaseNotesSyntax releaseNoteSyntax;
     private DistributionManagerBuilder distributionManagerBuilder;
 
     public ReleaseBundleCreate() {
     }
 
-    public ReleaseBundleCreate(String name, String version, String spec, String repo, boolean sign, DistributionManagerBuilder distributionManagerBuilder,
-                               boolean dryRun, String passphrase, String releaseNotePath, ReleaseNotesSyntax releaseNoteSyntax,
+    public ReleaseBundleCreate(String name, String version, String spec, String StoringRepository, boolean signImmediately, DistributionManagerBuilder distributionManagerBuilder,
+                               boolean dryRun, String gpgPassphrase, String releaseNotePath, ReleaseNotesSyntax releaseNoteSyntax, String description,
                                boolean insecureTls, Log log) {
         this.log = log;
         this.spec = spec;
         this.name = name;
-        this.sign = sign;
-        this.repo = repo;
         this.dryRun = dryRun;
         this.version = version;
-        this.passphrase = passphrase;
+        this.description = description;
         this.insecureTls = insecureTls;
+        this.gpgPassphrase = gpgPassphrase;
+        this.signImmediately = signImmediately;
         this.releaseNotePath = releaseNotePath;
+        this.storingRepository = StoringRepository;
         this.releaseNoteSyntax = releaseNoteSyntax;
         this.distributionManagerBuilder = distributionManagerBuilder;
     }
