@@ -41,6 +41,7 @@ public class ReleaseBundleCreate implements Serializable {
         this.releaseNoteSyntax = releaseNoteSyntax;
         this.distributionManagerBuilder = distributionManagerBuilder;
     }
+
     /**
      * Main function that create and send the request of Release-Bundle-Create to Distribution.
      */

@@ -25,7 +25,7 @@ public class AqlHelperBase {
     protected String buildName;
     protected String buildNumber;
 
-    AqlHelperBase(ArtifactoryManager artifactoryManager, Log log, FileSpec file) throws IOException {
+    public AqlHelperBase(ArtifactoryManager artifactoryManager, Log log, FileSpec file) throws IOException {
         this.artifactoryManager = artifactoryManager;
         this.log = log;
         convertFileSpecToAql(file);
@@ -39,7 +39,7 @@ public class AqlHelperBase {
         this.includeFields = buildIncludeQueryPart(file.getSortBy(), querySuffix);
     }
 
-    protected void convertFileSpecToAql(FileSpec file) throws IOException {
+    public void convertFileSpecToAql(FileSpec file) throws IOException {
         buildQueryAdditionalParts(file);
         this.queryBody = file.getAql();
     }
