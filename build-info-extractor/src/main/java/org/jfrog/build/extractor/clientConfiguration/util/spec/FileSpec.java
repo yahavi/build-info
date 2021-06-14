@@ -14,6 +14,7 @@ public class FileSpec {
     private String pattern;
     private String target;
     private String props;
+    private String targetProps;
     private String recursive;
     private String flat;
     private String regexp;
@@ -66,6 +67,14 @@ public class FileSpec {
 
     public void setProps(String props) {
         this.props = props;
+    }
+
+    public String getTargetProps() {
+        return targetProps;
+    }
+
+    public void setTargetProps(String targetProps) {
+        this.targetProps = targetProps;
     }
 
     public String getRecursive() {

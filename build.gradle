@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven {
             url "https://oss.jfrog.org/artifactory/libs-release"
@@ -269,6 +270,7 @@ project('build-info-extractor') {
     dependencies {
         implementation project(':build-info-client')
         implementation project(':build-info-api')
+        implementation group: 'com.jfrog.filespecs', name: 'file-specs-java', version: '1.0.x-SNAPSHOT'
 
         testImplementation "org.easymock:easymockclassextension:2.5.2"
         testFixturesApi project(':build-info-client')

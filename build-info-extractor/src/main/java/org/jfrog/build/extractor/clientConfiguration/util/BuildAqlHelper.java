@@ -11,12 +11,12 @@ import java.util.Map;
 
 public class BuildAqlHelper extends AqlHelperBase {
 
-    BuildAqlHelper(ArtifactoryManager artifactoryManager, Log log, FileSpec file) throws IOException {
+    public BuildAqlHelper(ArtifactoryManager artifactoryManager, Log log, FileSpec file) throws IOException {
         super(artifactoryManager, log, file);
     }
 
     @Override
-    protected void convertFileSpecToAql(FileSpec file) throws IOException {
+    public void convertFileSpecToAql(FileSpec file) throws IOException {
         super.buildQueryAdditionalParts(file);
         this.queryBody = createAqlBodyForBuild(buildName, buildNumber);
     }

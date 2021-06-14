@@ -54,6 +54,10 @@ public class AqlHelperBase {
         return (results == null ? new ArrayList<>() : results);
     }
 
+    public String getQueryBody() {
+        return queryBody;
+    }
+
     protected static String getBuildName(String build) {
         if (StringUtils.isBlank(build)) {
             return build;

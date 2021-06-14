@@ -1,31 +1,31 @@
 package org.jfrog.build.extractor.clientConfiguration.client.distribution.response;
 
-import org.jfrog.build.extractor.clientConfiguration.client.distribution.request.DistributeReleaseBundleRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.DistributionRules;
 
 import java.util.List;
 
+/**
+ * @author yahavi
+ */
+@SuppressWarnings("unused")
 public class DistributionStatusResponse {
-    int Id;
-    int FriendlyId;
-    String type;
-    String version;
-    DistributionSiteStatus distributionSiteStatus;
-    DistributeReleaseBundleRequest.DistributionRules distributionRules;
-    List<DistributionSiteStatus> sites;
+    @JsonProperty("distribution_rules")
+    private List<DistributionRules> distributionRules;
+    private List<DistributionSiteStatus> sites;
+    @JsonProperty("distribution_friendly_id")
+    private int friendlyId;
+    private String version;
+    private String status;
+    private String type;
+    @JsonProperty("distribution_id")
+    private String id;
 
-    public DistributionSiteStatus getDistributionSiteStatus() {
-        return distributionSiteStatus;
-    }
-
-    public void setDistributionSiteStatus(DistributionSiteStatus distributionSiteStatus) {
-        this.distributionSiteStatus = distributionSiteStatus;
-    }
-
-    public DistributeReleaseBundleRequest.DistributionRules getDistributionRules() {
+    public List<DistributionRules> getDistributionRules() {
         return distributionRules;
     }
 
-    public void setDistributionRules(DistributeReleaseBundleRequest.DistributionRules distributionRules) {
+    public void setDistributionRules(List<DistributionRules> distributionRules) {
         this.distributionRules = distributionRules;
     }
 
@@ -37,28 +37,12 @@ public class DistributionStatusResponse {
         this.sites = sites;
     }
 
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
-
     public int getFriendlyId() {
-        return FriendlyId;
+        return friendlyId;
     }
 
     public void setFriendlyId(int friendlyId) {
-        FriendlyId = friendlyId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        this.friendlyId = friendlyId;
     }
 
     public String getVersion() {
@@ -69,33 +53,48 @@ public class DistributionStatusResponse {
         this.version = version;
     }
 
+    public String getStatus() {
+        return status;
+    }
 
-    public class DistributionSiteStatus {
-        String status;
-        String error;
-        TargetArtifactory targetArtifactory;
-        int totalFiles;
-        int totalBytes;
-        int distributedBytes;
-        int distributedFiles;
-        List<String> fileErrors;
-        List<String> filesInProgress;
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-        public String getStatus() {
-            return status;
-        }
+    public String getType() {
+        return type;
+    }
 
-        public void setStatus(String status) {
-            this.status = status;
-        }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-        public String getError() {
-            return error;
-        }
+    public String getId() {
+        return id;
+    }
 
-        public void setError(String error) {
-            this.error = error;
-        }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public static class DistributionSiteStatus {
+        @JsonProperty("target_artifactory")
+        private TargetArtifactory targetArtifactory;
+        @JsonProperty("files_in_progress")
+        private List<String> filesInProgress;
+        @JsonProperty("file_errors")
+        private List<String> fileErrors;
+        @JsonProperty("distributed_bytes")
+        private int distributedBytes;
+        @JsonProperty("distributed_files")
+        private int distributedFiles;
+        @JsonProperty("general_error")
+        private String generalError;
+        @JsonProperty("total_files")
+        private int totalFiles;
+        @JsonProperty("total_bytes")
+        private int totalBytes;
+        private String status;
 
         public TargetArtifactory getTargetArtifactory() {
             return targetArtifactory;
@@ -105,20 +104,20 @@ public class DistributionStatusResponse {
             this.targetArtifactory = targetArtifactory;
         }
 
-        public int getTotalFiles() {
-            return totalFiles;
+        public List<String> getFilesInProgress() {
+            return filesInProgress;
         }
 
-        public void setTotalFiles(int totalFiles) {
-            this.totalFiles = totalFiles;
+        public void setFilesInProgress(List<String> filesInProgress) {
+            this.filesInProgress = filesInProgress;
         }
 
-        public int getTotalBytes() {
-            return totalBytes;
+        public List<String> getFileErrors() {
+            return fileErrors;
         }
 
-        public void setTotalBytes(int totalBytes) {
-            this.totalBytes = totalBytes;
+        public void setFileErrors(List<String> fileErrors) {
+            this.fileErrors = fileErrors;
         }
 
         public int getDistributedBytes() {
@@ -137,27 +136,44 @@ public class DistributionStatusResponse {
             this.distributedFiles = distributedFiles;
         }
 
-        public List<String> getFileErrors() {
-            return fileErrors;
+        public int getTotalFiles() {
+            return totalFiles;
         }
 
-        public void setFileErrors(List<String> fileErrors) {
-            this.fileErrors = fileErrors;
+        public void setTotalFiles(int totalFiles) {
+            this.totalFiles = totalFiles;
         }
 
-        public List<String> getFilesInProgress() {
-            return filesInProgress;
+        public int getTotalBytes() {
+            return totalBytes;
         }
 
-        public void setFilesInProgress(List<String> filesInProgress) {
-            this.filesInProgress = filesInProgress;
+        public void setTotalBytes(int totalBytes) {
+            this.totalBytes = totalBytes;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getGeneralError() {
+            return generalError;
+        }
+
+        public void setGeneralError(String generalError) {
+            this.generalError = generalError;
         }
     }
 
-    public class TargetArtifactory {
-        String serviceId;
-        String name;
-        String type;
+    public static class TargetArtifactory {
+        @JsonProperty("service_id")
+        private String serviceId;
+        private String name;
+        private String type;
 
         public String getServiceId() {
             return serviceId;

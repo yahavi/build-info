@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author yahavi
+ */
 abstract class VoidDistributionService extends VoidJFrogService {
     protected VoidDistributionService(Log log) {
         super(log);
@@ -15,8 +18,7 @@ abstract class VoidDistributionService extends VoidJFrogService {
 
     @Override
     protected void setResponse(InputStream stream) throws IOException {
-        log.debug("Distribution response: " + getStatusCode());
-        String ResponseMessage = IOUtils.toString(stream, StandardCharsets.UTF_8);
-        log.debug("Response:  " + ResponseMessage);
+        String ResponseMessage = getStatusCode() + IOUtils.toString(stream, StandardCharsets.UTF_8.name());
+        log.debug("Distribution response:  " + ResponseMessage);
     }
 }

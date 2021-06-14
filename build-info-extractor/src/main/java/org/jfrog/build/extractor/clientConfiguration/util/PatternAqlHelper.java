@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PatternAqlHelper extends AqlHelperBase {
-    PatternAqlHelper(ArtifactoryManager client, Log log, FileSpec file) throws IOException {
+    public PatternAqlHelper(ArtifactoryManager client, Log log, FileSpec file) throws IOException {
         super(client, log, file);
     }
 

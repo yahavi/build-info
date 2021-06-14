@@ -72,7 +72,7 @@ public class DockerExtractorTest extends IntegrationTestsBase {
 
     @BeforeClass
     private void setUp() {
-        artifactoryManagerBuilder = new ArtifactoryManagerBuilder().setServerUrl(getUrl()).setUsername(getUsername()).setPassword(getPassword()).setLog(getLog());
+        artifactoryManagerBuilder = new ArtifactoryManagerBuilder().setServerUrl(getArtifactoryUrl()).setUsername(getUsername()).setPassword(getPassword()).setLog(getLog());
         // Get image name
         localDomainName = validateDomainSuffix(System.getenv(LOCAL_DOMAIN));
         remoteDomainName = validateDomainSuffix(System.getenv(REMOTE_DOMAIN));

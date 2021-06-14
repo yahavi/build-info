@@ -1,20 +1,25 @@
 package org.jfrog.build.extractor.clientConfiguration.client.distribution.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.DistributionRules;
 
 import java.util.List;
 
+/**
+ * @author yahavi
+ */
 public class DistributeReleaseBundleRequest {
+    @JsonProperty("distribution_rules")
+    List<DistributionRules> distributionRules;
     @JsonProperty("dry_run")
     boolean dryRun;
-    @JsonProperty("distribution_rules")
-    DistributionRules distributionRules;
 
-    public DistributionRules getDistributionRules() {
+    @SuppressWarnings("unused")
+    public List<DistributionRules> getDistributionRules() {
         return distributionRules;
     }
 
-    public void setDistributionRules(DistributionRules distributionRules) {
+    public void setDistributionRules(List<DistributionRules> distributionRules) {
         this.distributionRules = distributionRules;
     }
 
@@ -24,38 +29,5 @@ public class DistributeReleaseBundleRequest {
 
     public void setDryRun(boolean dryRun) {
         this.dryRun = dryRun;
-    }
-
-    public class DistributionRules{
-        @JsonProperty("site_name")
-        String siteName;
-        @JsonProperty("city_name")
-        String cityName;
-        @JsonProperty("country_codes")
-        List<String> countryCodes;
-
-        public String getSiteName() {
-            return siteName;
-        }
-
-        public void setSiteName(String siteName) {
-            this.siteName = siteName;
-        }
-
-        public String getCityName() {
-            return cityName;
-        }
-
-        public void setCityName(String cityName) {
-            this.cityName = cityName;
-        }
-
-        public List<String> getCountryCodes() {
-            return countryCodes;
-        }
-
-        public void setCountryCodes(List<String> countryCodes) {
-            this.countryCodes = countryCodes;
-        }
     }
 }

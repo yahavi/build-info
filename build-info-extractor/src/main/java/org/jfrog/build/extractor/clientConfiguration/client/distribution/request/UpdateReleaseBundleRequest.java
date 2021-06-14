@@ -1,28 +1,34 @@
 package org.jfrog.build.extractor.clientConfiguration.client.distribution.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.ReleaseBundleSpec;
+import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.ReleaseNotes;
+import org.jfrog.build.extractor.clientConfiguration.util.spec.Spec;
 
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Represents a request to update/create a release bundle for Distribution.
+ *
+ * @author yahavi
  */
-public class UpdateReleaseBundleRequest extends SignReleaseBundleRequest{
-
-    @JsonProperty("dry_run")
-    boolean dryRun;
-    @JsonProperty("sign_immediately")
-    boolean signImmediately;
-    String description;
+@SuppressWarnings("unused")
+public class UpdateReleaseBundleRequest extends SignReleaseBundleRequest {
     @JsonProperty("release_notes")
-    ReleaseNotes releaseNotes;
+    private ReleaseNotes releaseNotes;
+    @JsonProperty("sign_immediately")
+    private boolean signImmediately;
+    private ReleaseBundleSpec spec;
+    private String description;
+    @JsonProperty("dry_run")
+    private boolean dryRun;
 
-    public boolean isDryRun() {
-        return dryRun;
+    public ReleaseNotes getReleaseNotes() {
+        return releaseNotes;
     }
 
-    public void setDryRun(boolean dryRun) {
-        this.dryRun = dryRun;
+    public void setReleaseNotes(ReleaseNotes releaseNotes) {
+        this.releaseNotes = releaseNotes;
     }
 
     public boolean isSignImmediately() {
@@ -41,118 +47,66 @@ public class UpdateReleaseBundleRequest extends SignReleaseBundleRequest{
         this.description = description;
     }
 
-    public ReleaseNotes getReleaseNotes() {
-        return releaseNotes;
+    public boolean isDryRun() {
+        return dryRun;
     }
 
-    public void setReleaseNotes(ReleaseNotes releaseNotes) {
-        this.releaseNotes = releaseNotes;
+    public void setDryRun(boolean dryRun) {
+        this.dryRun = dryRun;
     }
 
-
-    public class ReleaseNotes {
-        String syntax;
-        String content;
-
-        public String getSyntax() {
-            return syntax;
-        }
-
-        public void setSyntax(String syntax) {
-            this.syntax = syntax;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
+    public ReleaseBundleSpec getSpec() {
+        return spec;
     }
 
-    public class Spec {
-        List<Query> queries;
-
-        public List<Query> getQueries() {
-            return queries;
-        }
-
-        public void setQueries(List<Query> queries) {
-            this.queries = queries;
-        }
+    public void setSpec(ReleaseBundleSpec spec) {
+        this.spec = spec;
     }
 
-    public class Query {
-        String aql;
-        List<Mappings> mappings;
-        @JsonProperty("added_props")
-        List<AddedProps> addedProps;
+    public static class Builder<T extends UpdateReleaseBundleRequest> {
+        private ReleaseNotes releaseNotes;
+        private boolean signImmediately;
+        private String description;
+        private boolean dryRun;
+        private Spec spec;
 
-        public String getAql() {
-            return aql;
+        public Builder<T> releaseNotes(ReleaseNotes releaseNotes) {
+            this.releaseNotes = releaseNotes;
+            return this;
         }
 
-        public void setAql(String aql) {
-            this.aql = aql;
+        public Builder<T> signImmediately(boolean signImmediately) {
+            this.signImmediately = signImmediately;
+            return this;
         }
 
-        public List<Mappings> getMappings() {
-            return mappings;
+        public Builder<T> description(String description) {
+            this.description = description;
+            return this;
         }
 
-        public void setMappings(List<Mappings> mappings) {
-            this.mappings = mappings;
+        public Builder<T> dryRun(boolean dryRun) {
+            this.dryRun = dryRun;
+            return this;
         }
 
-        public List<AddedProps> getAddedProps() {
-            return addedProps;
+        public Builder<T> spec(Spec spec) {
+            this.spec = spec;
+            return this;
         }
 
-        public void setAddedProps(List<AddedProps> addedProps) {
-            this.addedProps = addedProps;
-        }
-    }
-
-    public class Mappings {
-        String input;
-        String output;
-
-        public String getInput() {
-            return input;
+        @SuppressWarnings("unchecked")
+        public T build() throws IOException {
+            return build((T) new UpdateReleaseBundleRequest());
         }
 
-        public void setInput(String input) {
-            this.input = input;
-        }
-
-        public String getOutput() {
-            return output;
-        }
-
-        public void setOutput(String output) {
-            this.output = output;
-        }
-    }
-
-    public class AddedProps {
-        String key;
-        List<String> value;
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public List<String> getValue() {
-            return value;
-        }
-
-        public void setValue(List<String> value) {
-            this.value = value;
+        public T build(T releaseBundleRequest) throws IOException {
+            releaseBundleRequest.setReleaseNotes(releaseNotes);
+            releaseBundleRequest.setSignImmediately(signImmediately);
+            releaseBundleRequest.setDescription(description);
+            releaseBundleRequest.setDryRun(dryRun);
+            releaseBundleRequest.setSpec(Utils.createSpec(spec));
+            return releaseBundleRequest;
         }
     }
 }

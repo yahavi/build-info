@@ -12,25 +12,25 @@ import org.jfrog.build.extractor.clientConfiguration.client.JFrogService;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * @author yahavi
+ */
 public class Version extends JFrogService<org.jfrog.build.client.Version> {
-    private static final String VERSION_REST_URL = "api/system/version";
-    private final Log log;
+    private static final String SYSTEM_INFO_REST_URL = "api/v1/system/info";
 
     public Version(Log logger) {
         super(logger);
-        log = logger;
-        result = ArtifactoryVersion.NOT_FOUND;
     }
 
     @Override
     public HttpRequestBase createRequest() {
-        return new HttpGet(VERSION_REST_URL);
+        return new HttpGet(SYSTEM_INFO_REST_URL);
     }
 
     @Override
     protected void setResponse(InputStream stream) throws IOException {
-        JsonNode result = getMapper(false).readTree(stream);
-        log.debug("Version result: " + result);
+        JsonNode result = getMapper(true).readTree(stream);
+        log.debug("System Info result: " + result);
         String version = result.get("version").asText();
         this.result = new org.jfrog.build.client.Version(version);
     }
