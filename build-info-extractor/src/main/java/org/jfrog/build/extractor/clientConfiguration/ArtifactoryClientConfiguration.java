@@ -237,6 +237,14 @@ public class ArtifactoryClientConfiguration {
         rootConfig.setStringValue(EXPORT_FILE, exportFile);
     }
 
+    public String getDependencyTreeFile() {
+        return rootConfig.getStringValue(DEPENDENCY_TREE_FILE);
+    }
+
+    public void setDependencyTreeFile(String dependencyTreeFile) {
+        rootConfig.setStringValue(DEPENDENCY_TREE_FILE, dependencyTreeFile);
+    }
+
     public void setIncludeEnvVars(Boolean enabled) {
         rootConfig.setBooleanValue(INCLUDE_ENV_VARS, enabled);
     }

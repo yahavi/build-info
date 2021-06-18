@@ -307,6 +307,10 @@ public abstract class BuildInfoExtractorUtils {
         }
     }
 
+    public static String createDependencyTree(Map<String, String[][]> requestedByMap) {
+
+    }
+
     private static void addPropsFromCommandSystemProp(Properties additionalProps, Log log) {
         // Bamboo ivy should read password and props file location from system property named "sun.java.command"
         String commandKey = "sun.java.command";

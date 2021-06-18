@@ -28,6 +28,8 @@ public interface BuildInfoConfigProperties {
     String PROP_PROPS_FILE = BUILD_INFO_CONFIG_PREFIX + PROPERTIES_FILE;
     String EXPORT_FILE = "exportFile";
     String PROP_EXPORT_FILE_PATH = BUILD_INFO_CONFIG_PREFIX + EXPORT_FILE;
+    String DEPENDENCY_TREE_FILE = "dependencyTree";
+    String PROP_DEPENDENCY_TREE_PATH = BUILD_INFO_CONFIG_PREFIX + DEPENDENCY_TREE_FILE;
 
     String ACTIVATE_RECORDER = "org.jfrog.build.extractor.maven.recorder.activate";
 

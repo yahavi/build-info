@@ -16,7 +16,7 @@
 
 package org.jfrog.build.extractor.maven;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.metadata.ArtifactMetadata;
@@ -56,6 +56,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -169,6 +172,10 @@ public class BuildInfoRecorder extends AbstractExecutionListener implements Buil
             if (build != null) {
                 File basedir = event.getSession().getTopLevelProject().getBasedir();
                 buildDeploymentHelper.deploy(build, conf, deployableArtifactBuilderMap, projectHasTestFailures, basedir);
+            }
+            String dependencyTreeFile = StringUtils.firstNonBlank(System.getenv(BuildInfoConfigProperties.PROP_DEPENDENCY_TREE_PATH), conf.getDependencyTreeFile());
+            if (dependencyTreeFile != null) {
+                Files.write(Paths.get(dependencyTreeFile), BuildInfoExtractorUtils.createDependencyTree(dependencyParentsMaps).getBytes(StandardCharsets.UTF_8));
             }
             deployableArtifactBuilderMap.clear();
             if (wrappedListener != null) {
