@@ -336,9 +336,13 @@ public class TaskHelperPublications extends TaskHelper {
 
     private void addPublication(Publication publicationObj) {
         if (publicationObj instanceof IvyPublication) {
-            ivyPublications.add((IvyPublication) publicationObj);
+            if (isPublishIvy()) {
+                ivyPublications.add((IvyPublication) publicationObj);
+            }
         } else if (publicationObj instanceof MavenPublication) {
-            mavenPublications.add((MavenPublication) publicationObj);
+            if (isPublishMaven()) {
+                mavenPublications.add((MavenPublication) publicationObj);
+            }
         } else {
             log.warn("Publication named '{}' in project '{}' is of unknown type '{}'",
                     publicationObj.getName(), getProject().getPath(), publicationObj.getClass());

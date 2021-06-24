@@ -94,7 +94,11 @@ public class GradleModuleExtractor implements ModuleExtractor<Project> {
                 builder.artifacts(calculateArtifacts(deployIncludeDetails))
                         .excludedArtifacts(calculateArtifacts(deployExcludeDetails));
             } else {
-                log.warn("No publisher config found for project: " + project.getName());
+                if (ArtifactoryPluginUtil.shouldPublishArtifacts(project)) {
+                    log.warn("No publisher config found for project: " + project.getName());
+                } else {
+                    log.debug("Publish artifacts set to false for project " + project.getName());
+                }
             }
             builder.dependencies(calculateDependencies(project, moduleId));
         } catch (Exception e) {

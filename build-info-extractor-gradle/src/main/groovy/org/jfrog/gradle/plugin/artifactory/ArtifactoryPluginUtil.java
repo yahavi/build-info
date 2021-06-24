@@ -40,6 +40,20 @@ public class ArtifactoryPluginUtil {
         return null;
     }
 
+    public static boolean shouldPublishArtifacts(Project project) {
+        while (project != null) {
+            ArtifactoryPluginConvention acc = project.getConvention().findPlugin(ArtifactoryPluginConvention.class);
+            if (acc != null) {
+                ArtifactoryClientConfiguration.PublisherHandler publisher = acc.getClientConfig().publisher;
+                if (!publisher.isPublishArtifacts()) {
+                    return false;
+                }
+            }
+            project = project.getParent();
+        }
+        return true;
+    }
+
     public static ArtifactoryClientConfiguration.PublisherHandler getPublisherHandler(Project project) {
         ArtifactoryPluginConvention convention = getPublisherConvention(project);
         if (convention != null) {

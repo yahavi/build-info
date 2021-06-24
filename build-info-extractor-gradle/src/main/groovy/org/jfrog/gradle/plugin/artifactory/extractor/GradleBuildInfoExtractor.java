@@ -88,7 +88,6 @@ public class GradleBuildInfoExtractor implements BuildInfoExtractor<Project> {
         bib.durationMillis(durationMillis);
 
         Set<File> moduleFilesWithModules = moduleInfoFileProducers.stream()
-                .filter(ModuleInfoFileProducer::hasModules)
                 .flatMap(moduleInfoFileProducer -> moduleInfoFileProducer.getModuleInfoFiles().getFiles().stream())
                 .collect(Collectors.toSet());
 
