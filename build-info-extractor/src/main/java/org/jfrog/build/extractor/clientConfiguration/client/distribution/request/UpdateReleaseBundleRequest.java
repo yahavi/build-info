@@ -3,7 +3,7 @@ package org.jfrog.build.extractor.clientConfiguration.client.distribution.reques
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.ReleaseBundleSpec;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.ReleaseNotes;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.Spec;
+import org.jfrog.filespecs.FileSpec;
 
 import java.io.IOException;
 
@@ -65,18 +65,34 @@ public class UpdateReleaseBundleRequest extends SignReleaseBundleRequest {
 
     public static class Builder<T extends UpdateReleaseBundleRequest> {
         private ReleaseNotes releaseNotes;
+        private String storingRepository;
         private boolean signImmediately;
+        private ReleaseBundleSpec spec;
         private String description;
         private boolean dryRun;
-        private Spec spec;
 
         public Builder<T> releaseNotes(ReleaseNotes releaseNotes) {
             this.releaseNotes = releaseNotes;
             return this;
         }
 
+        public Builder<T> storingRepository(String storingRepository) {
+            this.storingRepository = storingRepository;
+            return this;
+        }
+
         public Builder<T> signImmediately(boolean signImmediately) {
             this.signImmediately = signImmediately;
+            return this;
+        }
+
+        public Builder<T> spec(String spec) throws IOException {
+            this.spec = Utils.createSpec(spec);
+            return this;
+        }
+
+        public Builder<T> spec(FileSpec spec) throws IOException {
+            this.spec = Utils.createSpec(spec);
             return this;
         }
 
@@ -90,11 +106,6 @@ public class UpdateReleaseBundleRequest extends SignReleaseBundleRequest {
             return this;
         }
 
-        public Builder<T> spec(Spec spec) {
-            this.spec = spec;
-            return this;
-        }
-
         @SuppressWarnings("unchecked")
         public T build() throws IOException {
             return build((T) new UpdateReleaseBundleRequest());
@@ -102,10 +113,11 @@ public class UpdateReleaseBundleRequest extends SignReleaseBundleRequest {
 
         public T build(T releaseBundleRequest) throws IOException {
             releaseBundleRequest.setReleaseNotes(releaseNotes);
+            releaseBundleRequest.setStoringRepository(storingRepository);
             releaseBundleRequest.setSignImmediately(signImmediately);
             releaseBundleRequest.setDescription(description);
             releaseBundleRequest.setDryRun(dryRun);
-            releaseBundleRequest.setSpec(Utils.createSpec(spec));
+            releaseBundleRequest.setSpec(spec);
             return releaseBundleRequest;
         }
     }

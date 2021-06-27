@@ -9,8 +9,8 @@ import org.jfrog.build.extractor.clientConfiguration.client.distribution.respons
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.response.GetReleaseBundleStatusResponse;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.DistributionRules;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.ReleaseNotes;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.FileSpec;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.Spec;
+import org.jfrog.filespecs.FileSpec;
+import org.jfrog.filespecs.entities.FilesGroup;
 import org.jfrog.filespecs.properties.Property;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -93,11 +93,9 @@ public class LocalDistributionManagerTest extends DistributionManagerTest {
     public void addedPropsTest() throws IOException {
         // Create a release bundle with added props
         String fileName = uploadFile();
-        FileSpec filesGroup = new FileSpec();
-        filesGroup.setTargetProps("key1=value1,value2");
-        filesGroup.setPattern(localRepo1 + "/data/" + fileName);
-        Spec fileSpec = new Spec();
-        fileSpec.setFiles(new FileSpec[]{filesGroup});
+        FileSpec fileSpec = new FileSpec();
+        FilesGroup filesGroup = new FilesGroup().setTargetProps("key1=value1,value2").setPattern(localRepo1 + "/data/" + fileName);
+        fileSpec.addFilesGroup(filesGroup);
         CreateReleaseBundleRequest request = new CreateReleaseBundleRequest.Builder(RELEASE_BUNDLE_NAME, RELEASE_BUNDLE_VERSION)
                 .spec(fileSpec)
                 .build();

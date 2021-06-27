@@ -7,8 +7,8 @@ import org.jfrog.build.extractor.clientConfiguration.client.distribution.request
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.response.DistributeReleaseBundleResponse;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.response.DistributionStatusResponse;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.DistributionRules;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.FileSpec;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.Spec;
+import org.jfrog.filespecs.FileSpec;
+import org.jfrog.filespecs.entities.FilesGroup;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import org.testng.collections.Lists;
@@ -39,12 +39,9 @@ public class RemoteDistributionManagerTest extends DistributionManagerTest {
     public void distributeWithMappingTest() throws IOException {
         // Create a release bundle with path mapping
         String fileName = uploadFile();
-
-        FileSpec filesGroup = new FileSpec();
-        filesGroup.setPattern(localRepo1 + "/data/(*)");
-        filesGroup.setTarget(localRepo2 + "/data2/{1}");
-        Spec fileSpec = new Spec();
-        fileSpec.setFiles(new FileSpec[]{filesGroup});
+        FileSpec fileSpec = new FileSpec();
+        FilesGroup filesGroup = new FilesGroup().setPattern(localRepo1 + "/data/(*)").setTarget(localRepo2 + "/data2/{1}");
+        fileSpec.addFilesGroup(filesGroup);
         CreateReleaseBundleRequest request = new CreateReleaseBundleRequest.Builder(RELEASE_BUNDLE_NAME, RELEASE_BUNDLE_VERSION)
                 .spec(fileSpec)
                 .signImmediately(true)

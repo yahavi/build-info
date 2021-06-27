@@ -10,8 +10,8 @@ import org.jfrog.build.extractor.clientConfiguration.client.distribution.request
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.request.UpdateReleaseBundleRequest;
 import org.jfrog.build.extractor.clientConfiguration.client.distribution.types.ReleaseNotes;
 import org.jfrog.build.extractor.clientConfiguration.deploy.DeployDetails;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.FileSpec;
-import org.jfrog.build.extractor.clientConfiguration.util.spec.Spec;
+import org.jfrog.filespecs.FileSpec;
+import org.jfrog.filespecs.entities.FilesGroup;
 import org.testng.annotations.*;
 import org.testng.collections.CollectionUtils;
 
@@ -71,31 +71,29 @@ public class DistributionManagerTest extends IntegrationTestsBase {
     }
 
     CreateReleaseBundleRequest.Builder createRequestBuilder() throws IOException {
-        Spec releaseBundleSpec = createSpec();
+        FileSpec fileSpec = createSpec();
         ReleaseNotes releaseNotes = new ReleaseNotes();
         releaseNotes.setContent("Create content");
         releaseNotes.setSyntax(ReleaseNotes.Syntax.plain_text);
         return (CreateReleaseBundleRequest.Builder) new CreateReleaseBundleRequest.Builder(RELEASE_BUNDLE_NAME, RELEASE_BUNDLE_VERSION)
                 .description("Create")
                 .releaseNotes(releaseNotes)
-                .spec(releaseBundleSpec);
+                .spec(fileSpec);
     }
 
     UpdateReleaseBundleRequest.Builder<UpdateReleaseBundleRequest> updateRequestBuilder() throws IOException {
-        Spec releaseBundleSpec = createSpec();
+        FileSpec fileSpec = createSpec();
         ReleaseNotes releaseNotes = new ReleaseNotes();
         releaseNotes.setContent("Update content");
         releaseNotes.setSyntax(ReleaseNotes.Syntax.plain_text);
-        return new UpdateReleaseBundleRequest.Builder<>().description("Update").releaseNotes(releaseNotes).spec(releaseBundleSpec);
+        return new UpdateReleaseBundleRequest.Builder<>().description("Update").releaseNotes(releaseNotes).spec(fileSpec);
     }
 
-    Spec createSpec() throws IOException {
+    FileSpec createSpec() throws IOException {
         String fileName = uploadFile();
-        FileSpec filesGroup = new FileSpec();
-        filesGroup.setTargetProps("key1=value1,value2");
-        filesGroup.setPattern(localRepo1 + "/data/" + fileName);
-        Spec fileSpec = new Spec();
-        fileSpec.setFiles(new FileSpec[]{filesGroup});
+        FilesGroup filesGroup = new FilesGroup().setTargetProps("key1=value1,value2").setPattern(localRepo1 + "/data/" + fileName);
+        FileSpec fileSpec = new FileSpec();
+        fileSpec.addFilesGroup(filesGroup);
         return fileSpec;
     }
 
