@@ -10,30 +10,14 @@ import java.util.Objects;
 /**
  * @author yahavi
  */
+@SuppressWarnings("unused")
 public class Issue implements Comparable<Issue> {
-
-    private String created;
-    private String description;
-    private String issueType = "N/A";
-    private String provider;
     private Severity severity = Severity.Normal;
-    private String summary;
-    private String component = "";
     private List<String> fixedVersions;
-
-    public Issue() {
-    }
-
-    @SuppressWarnings("unused")
-    public Issue(String created, String description, String issueType, String provider, Severity severity, String summary, List<String> fixedVersions) {
-        this.created = created;
-        this.description = description;
-        this.issueType = issueType;
-        this.provider = provider;
-        this.severity = severity;
-        this.summary = summary;
-        this.fixedVersions = fixedVersions;
-    }
+    private String component = "";
+    private String description;
+    private String issueId;
+    private String summary;
 
     public Severity getSeverity() {
         return this.severity;
@@ -47,42 +31,27 @@ public class Issue implements Comparable<Issue> {
         this.component = component;
     }
 
-    public String getCreated() {
-        return created;
-    }
-
-    @SuppressWarnings("unused")
     public String getDescription() {
         return description;
     }
 
-    @SuppressWarnings("unused")
-    public String getIssueType() {
-        return issueType;
+    public String getIssueId() {
+        return issueId;
     }
 
-    @SuppressWarnings("unused")
-    public String getProvider() {
-        return provider;
-    }
-
-    @SuppressWarnings("unused")
     public String getSummary() {
         return summary;
     }
 
-    @SuppressWarnings("unused")
     public List<String> getFixedVersions() {
         return fixedVersions;
     }
 
-    @SuppressWarnings("unused")
-    public void setFixedVersions(List<String> fixedVersions) {
+    void setFixedVersions(List<String> fixedVersions) {
         this.fixedVersions = fixedVersions;
     }
 
     @JsonIgnore
-    @SuppressWarnings("WeakerAccess")
     public boolean isTopSeverity() {
         return getSeverity() == Severity.Critical;
     }
@@ -106,14 +75,61 @@ public class Issue implements Comparable<Issue> {
             return false;
         }
         Issue otherIssue = (Issue) other;
-        if (StringUtils.isEmpty(component)) {
-            return StringUtils.equals(description, otherIssue.description) && StringUtils.equals(summary, otherIssue.summary);
-        }
-        return StringUtils.equals(component, otherIssue.component) && StringUtils.equals(summary, otherIssue.summary);
+        return StringUtils.equals(issueId, otherIssue.issueId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(summary, component, description);
+        return Objects.hash(issueId);
+    }
+
+    public static class Builder {
+        private Severity severity = Severity.Normal;
+        private List<String> fixedVersions;
+        private String component = "";
+        private String description;
+        private String issueId;
+        private String summary;
+
+        public Builder severity(Severity severity) {
+            this.severity = severity;
+            return this;
+        }
+
+        public Builder fixedVersions(List<String> fixedVersions) {
+            this.fixedVersions = fixedVersions;
+            return this;
+        }
+
+        public Builder component(String component) {
+            this.component = component;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder issueId(String issueId) {
+            this.issueId = issueId;
+            return this;
+        }
+
+        public Builder summary(String summary) {
+            this.summary = summary;
+            return this;
+        }
+
+        public Issue build() {
+            Issue issue = new Issue();
+            issue.severity = this.severity;
+            issue.fixedVersions = this.fixedVersions;
+            issue.component = this.component;
+            issue.description = this.description;
+            issue.issueId = this.issueId;
+            issue.summary = this.summary;
+            return issue;
+        }
     }
 }

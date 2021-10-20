@@ -7,42 +7,31 @@ import java.io.Serializable;
 /**
  * @author yahavi
  */
+@SuppressWarnings("unused")
 public class GeneralInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String componentId = "";
-    private String name = "";
-    private String path = "";
     private String pkgType = "";
-    private String groupId = "";
-    private String artifactId = "";
-    private String version = "";
+    private String path = "";
     private String sha1 = "";
 
     @SuppressWarnings("WeakerAccess")
     public GeneralInfo() {
     }
 
-    @SuppressWarnings("unused")
-    public GeneralInfo(String componentId, String name, String path, String pkgType) {
+    public GeneralInfo(String componentId, String path, String pkgType) {
         this.componentId = componentId;
-        this.name = name;
         this.path = path;
         this.pkgType = pkgType;
     }
 
     public String getGroupId() {
-        if (StringUtils.isNotBlank(groupId)) {
-            return groupId;
-        }
         return isValid() ? componentId.substring(0, componentId.indexOf(":")) : "";
     }
 
     public String getArtifactId() {
-        if (StringUtils.isNotBlank(artifactId)) {
-            return artifactId;
-        }
         if (!isValid()) {
             return "";
         }
@@ -54,26 +43,17 @@ public class GeneralInfo implements Serializable {
     }
 
     public String getVersion() {
-        if (StringUtils.isNotBlank(version)) {
-            return version;
-        }
         return isValid() ? componentId.substring(componentId.lastIndexOf(":") + 1) : "";
     }
 
-    @SuppressWarnings("unused")
     public String getComponentId() {
         return componentId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getPath() {
         return path;
     }
 
-    @SuppressWarnings("unused")
     public String getPkgType() {
         return pkgType;
     }
@@ -82,14 +62,8 @@ public class GeneralInfo implements Serializable {
         return sha1;
     }
 
-    @SuppressWarnings("unused")
     public GeneralInfo componentId(String componentId) {
         this.componentId = componentId;
-        return this;
-    }
-
-    public GeneralInfo name(String name) {
-        this.name = name;
         return this;
     }
 
@@ -98,22 +72,6 @@ public class GeneralInfo implements Serializable {
         return this;
     }
 
-    public GeneralInfo groupId(String groupId) {
-        this.groupId = groupId;
-        return this;
-    }
-
-    public GeneralInfo artifactId(String artifactId) {
-        this.artifactId = artifactId;
-        return this;
-    }
-
-    public GeneralInfo version(String version) {
-        this.version = version;
-        return this;
-    }
-
-    @SuppressWarnings("unused")
     public GeneralInfo pkgType(String pkgType) {
         this.pkgType = pkgType;
         return this;

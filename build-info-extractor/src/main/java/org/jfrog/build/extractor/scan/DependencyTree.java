@@ -1,10 +1,9 @@
 package org.jfrog.build.extractor.scan;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.*;
 
 /**
@@ -15,10 +14,10 @@ import java.util.*;
 @JsonFilter("xray-graph-filter")
 public class DependencyTree extends DefaultMutableTreeNode {
 
-    private Set<License> licenses = new HashSet<>();
-    private Set<Issue> issues = new HashSet<>();
+    private Set<NodeInfo.LicenseKey> licenses = new HashSet<>();
+    private Set<NodeInfo.IssueKey> issues = new HashSet<>();
+    private Severity topSeverity = Severity.Normal;
     private Set<Scope> scopes = new HashSet<>();
-    private Issue topIssue = new Issue();
     private GeneralInfo generalInfo;
     private String packagePrefix = "";
 
@@ -38,11 +37,11 @@ public class DependencyTree extends DefaultMutableTreeNode {
         super(userObject);
     }
 
-    public void setLicenses(Set<License> licenses) {
+    public void setLicenses(Set<NodeInfo.LicenseKey> licenses) {
         this.licenses = licenses;
     }
 
-    public void setIssues(Set<Issue> issues) {
+    public void setIssues(Set<NodeInfo.IssueKey> issues) {
         this.issues = issues;
     }
 
@@ -61,11 +60,11 @@ public class DependencyTree extends DefaultMutableTreeNode {
         this.generalInfo = generalInfo;
     }
 
-    public Set<License> getLicenses() {
+    public Set<NodeInfo.LicenseKey> getLicenses() {
         return licenses;
     }
 
-    public Set<Issue> getIssues() {
+    public Set<NodeInfo.IssueKey> getIssues() {
         return issues;
     }
 
@@ -82,8 +81,8 @@ public class DependencyTree extends DefaultMutableTreeNode {
      * @return top severity issue of the current node and its ancestors
      */
     @SuppressWarnings("WeakerAccess")
-    public Issue getTopIssue() {
-        return topIssue;
+    public Severity getTopSeverity() {
+        return topSeverity;
     }
 
     /**
@@ -91,7 +90,7 @@ public class DependencyTree extends DefaultMutableTreeNode {
      */
     @SuppressWarnings("unused")
     public boolean isLicenseViolating() {
-        if (licenses.stream().anyMatch(License::isViolate)) {
+        if (licenses.stream().anyMatch(NodeInfo.LicenseKey::isViolating)) {
             return true;
         }
         return getChildren().stream().anyMatch(DependencyTree::isLicenseViolating);
@@ -143,10 +142,9 @@ public class DependencyTree extends DefaultMutableTreeNode {
      * @return all issues of the current node and its ancestors
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public Set<Issue> processTreeIssues() {
+    public Set<NodeInfo.IssueKey> processTreeIssues() {
         setIssuesComponent();
-        getChildren().forEach(child -> issues.addAll(child.processTreeIssues()));
-        setTopIssue();
+        addChildIssues();
         sortChildren();
         return issues;
     }
@@ -158,24 +156,22 @@ public class DependencyTree extends DefaultMutableTreeNode {
         }
     }
 
+    private void addChildIssues() {
+        getChildren().forEach(child -> {
+            issues.addAll(child.processTreeIssues());
+            if (child.topSeverity.isHigherThan(topSeverity)) {
+                topSeverity = child.topSeverity;
+            }
+        });
+    }
+
     private void sortChildren() {
         getChildren().sort(Comparator
-                .comparing(DependencyTree::getTopIssue, Comparator.comparing(Issue::getSeverity))
+                .comparing(DependencyTree::getTopSeverity)
                 .thenComparing(DependencyTree::getIssueCount)
                 .thenComparing(DependencyTree::getChildCount)
                 .reversed()
                 .thenComparing(DependencyTree::toString));
-    }
-
-    private void setTopIssue() {
-        issues.forEach(issue -> {
-            if (topIssue.isTopSeverity()) {
-                return;
-            }
-            if (issue.isHigherSeverityThan(topIssue)) {
-                topIssue = issue;
-            }
-        });
     }
 
     /**
@@ -185,7 +181,7 @@ public class DependencyTree extends DefaultMutableTreeNode {
      * @param allLicenses - Out - All dependency tree licenses
      */
     @SuppressWarnings("unused")
-    public void collectAllScopesAndLicenses(Set<Scope> allScopes, Set<License> allLicenses) {
+    public void collectAllScopesAndLicenses(Set<Scope> allScopes, Set<NodeInfo.LicenseKey> allLicenses) {
         Enumeration<?> enumeration = breadthFirstEnumeration();
         while (enumeration.hasMoreElements()) {
             DependencyTree child = (DependencyTree) enumeration.nextElement();
