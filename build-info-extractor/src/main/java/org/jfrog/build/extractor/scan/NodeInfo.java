@@ -9,6 +9,7 @@ import java.util.Set;
 /**
  * @author yahavi
  **/
+@SuppressWarnings("unused")
 public class NodeInfo {
     private Set<LicenseKey> licenses = new HashSet<>();
     private Set<IssueKey> issues = new HashSet<>();
@@ -65,6 +66,7 @@ public class NodeInfo {
         licenses.add(licenseKey);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static class IssueKey {
         private Set<String> fixedVersions = new HashSet<>();
         private String component;
@@ -83,27 +85,24 @@ public class NodeInfo {
             return fixedVersions;
         }
 
-        public IssueKey setFixedVersions(Set<String> fixedVersions) {
+        public void setFixedVersions(Set<String> fixedVersions) {
             this.fixedVersions = fixedVersions;
-            return this;
         }
 
         public String getComponent() {
             return component;
         }
 
-        public IssueKey setComponent(String component) {
+        public void setComponent(String component) {
             this.component = component;
-            return this;
         }
 
         public String getIssueId() {
             return issueId;
         }
 
-        public IssueKey setIssueId(String issueId) {
+        public void setIssueId(String issueId) {
             this.issueId = issueId;
-            return this;
         }
 
         @Override
@@ -127,6 +126,7 @@ public class NodeInfo {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static class LicenseKey {
         private String licenseName;
         private boolean violating;

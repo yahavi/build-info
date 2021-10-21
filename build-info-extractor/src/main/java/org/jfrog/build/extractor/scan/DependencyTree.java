@@ -60,6 +60,10 @@ public class DependencyTree extends DefaultMutableTreeNode {
         this.generalInfo = generalInfo;
     }
 
+    public void setTopSeverity(Severity topSeverity) {
+        this.topSeverity = topSeverity;
+    }
+
     public Set<NodeInfo.LicenseKey> getLicenses() {
         return licenses;
     }
@@ -80,7 +84,6 @@ public class DependencyTree extends DefaultMutableTreeNode {
     /**
      * @return top severity issue of the current node and its ancestors
      */
-    @SuppressWarnings("WeakerAccess")
     public Severity getTopSeverity() {
         return topSeverity;
     }
