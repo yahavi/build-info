@@ -71,7 +71,7 @@ pipelines:
             - ./jf bs --fail=false
 
             # Distribute release bundle
-            - ./jf ds rbc build-info $NEXT_VERSION --spec=./ci/distribution/prod-rbc-filespec.json --spec-vars="version=$NEXT_VERSION" --sign
+            - ./jf ds rbc build-info $NEXT_VERSION --spec=./release/specs/prod-rbc-filespec.json --spec-vars="version=$NEXT_VERSION" --sign
             - ./jf ds rbd build-info $NEXT_VERSION --site="releases.jfrog.io"
 
             # Publish to Maven Central
