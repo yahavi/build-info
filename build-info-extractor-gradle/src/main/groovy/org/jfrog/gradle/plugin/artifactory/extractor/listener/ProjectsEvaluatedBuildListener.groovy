@@ -57,7 +57,7 @@ public class ProjectsEvaluatedBuildListener extends BuildAdapter implements Proj
     void afterEvaluate(Project project, ProjectState state) {
         Set<Task> tasks = project.getTasksByName(ARTIFACTORY_PUBLISH_TASK_NAME, false)
         StartParameter startParameter = project.getGradle().getStartParameter();
-        tasks.each { ArtifactoryTask artifactoryTask ->
+        tasks.each { Task artifactoryTask ->
             artifactoryTasks.add(artifactoryTask)
             artifactoryTask.finalizeByDeployTask(project)
             if (startParameter.isConfigureOnDemand()) {
@@ -114,7 +114,7 @@ public class ProjectsEvaluatedBuildListener extends BuildAdapter implements Proj
         }
     }
 
-    private void evaluate(ArtifactoryTask artifactoryTask) {
+    private void evaluate(Task artifactoryTask) {
         log.debug("evaluating buildBaseTask {}", artifactoryTask)
         ArtifactoryPluginConvention convention =
                 ArtifactoryPluginUtil.getArtifactoryConvention(artifactoryTask.project)
@@ -147,7 +147,7 @@ public class ProjectsEvaluatedBuildListener extends BuildAdapter implements Proj
      * @param publishingExtension - The publishing extension: 'maven-publish' or 'ivy-publish'
      * @param publicationsNames - Publications names separated by commas
      */
-    private static void addPublications(ArtifactoryTask artifactoryTask, PublishingExtension publishingExtension, String publicationsNames) {
+    private static void addPublications(Task artifactoryTask, PublishingExtension publishingExtension, String publicationsNames) {
         if (StringUtils.isEmpty(publicationsNames)) {
             return
         }
@@ -191,7 +191,7 @@ public class ProjectsEvaluatedBuildListener extends BuildAdapter implements Proj
      * @param artifactoryTask - The Artifactory task
      * @param publishingExtension - The publishing extension or null if the project uses configurations
      */
-    private void addDefaultPublicationsOrConfigurations(ArtifactoryTask artifactoryTask, @Nullable PublishingExtension publishingExtension) {
+    private void addDefaultPublicationsOrConfigurations(Task artifactoryTask, @Nullable PublishingExtension publishingExtension) {
         if (publishingExtension != null) {
             // Add mavenWeb publication if war task exists and enabled
             Task warTask = artifactoryTask.project.tasks.findByName("war");
@@ -272,7 +272,7 @@ public class ProjectsEvaluatedBuildListener extends BuildAdapter implements Proj
     void projectsEvaluated(Gradle gradle) {
         Set<Task> tasks = gradle.rootProject.getTasksByName(ARTIFACTORY_PUBLISH_TASK_NAME, false)
         artifactoryTasks.addAll(tasks)
-        artifactoryTasks.each { ArtifactoryTask artifactoryTask ->
+        artifactoryTasks.each { Task artifactoryTask ->
             if (!artifactoryTask.isEvaluated()) {
                 evaluate(artifactoryTask)
                 artifactoryTask.finalizeByDeployTask(artifactoryTask.getProject())

@@ -2,6 +2,7 @@ package org.jfrog.gradle.plugin.artifactory
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
 import org.jfrog.gradle.plugin.artifactory.extractor.ModuleInfoFileProducer
@@ -28,9 +29,9 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
             return
         }
         // Add an Artifactory plugin convention to all the project modules
-        ArtifactoryPluginConvention conv = getArtifactoryPluginConvention(project)
+        Object conv = getArtifactoryPluginConvention(project)
         // Then add the artifactory publish task
-        ArtifactoryTask artifactoryTask = addArtifactoryPublishTask(project)
+        Task artifactoryTask = addArtifactoryPublishTask(project)
         // Add the module info producer task
         addModuleInfoTask(artifactoryTask)
 
@@ -69,7 +70,7 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
      *      ...
      *  }
      */
-    private ArtifactoryPluginConvention getArtifactoryPluginConvention(Project project) {
+    private Object getArtifactoryPluginConvention(Project project) {
         if (project.convention.plugins.artifactory == null) {
             project.convention.plugins.artifactory = createArtifactoryPluginConvention(project)
         }
@@ -83,8 +84,8 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
     /**
      * Add the "artifactoryPublish" gradle task (under "publishing" task group)
      */
-    private ArtifactoryTask addArtifactoryPublishTask(Project project) {
-        ArtifactoryTask artifactoryTask = project.tasks.findByName(ARTIFACTORY_PUBLISH_TASK_NAME)
+    private Task addArtifactoryPublishTask(Project project) {
+        Task artifactoryTask = project.tasks.findByName(ARTIFACTORY_PUBLISH_TASK_NAME)
         if (artifactoryTask == null) {
             log.debug("Configuring ${ARTIFACTORY_PUBLISH_TASK_NAME} task for project ${project.path}: is root? ${isRootProject(project)}")
             artifactoryTask = createArtifactoryPublishTask(project)
@@ -96,8 +97,8 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
     /**
      * Add the "artifactoryDistribute" gradle task (under "publishing" task group)
      */
-    private DistributeBuildTask addDistributeBuildTask(Project project) {
-        DistributeBuildTask distributeBuildTask = project.tasks.findByName(DISTRIBUTE_TASK_NAME)
+    private Task addDistributeBuildTask(Project project) {
+        Task distributeBuildTask = project.tasks.findByName(DISTRIBUTE_TASK_NAME)
         if (distributeBuildTask == null) {
             log.debug("Configuring ${DISTRIBUTE_TASK_NAME} task for project ${project.path}: is root? ${isRootProject(project)}")
             distributeBuildTask = createArtifactoryDistributeBuildTask(project)
@@ -106,9 +107,9 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
         distributeBuildTask
     }
 
-    private ExtractModuleTask addModuleInfoTask(ArtifactoryTask artifactoryTask) {
+    private Task addModuleInfoTask(Object artifactoryTask) {
         Project project = artifactoryTask.project
-        ExtractModuleTask extractModuleTask = project.tasks.findByName(EXTRACT_MODULE_TASK_NAME)
+        Task extractModuleTask = project.tasks.findByName(EXTRACT_MODULE_TASK_NAME)
         if (extractModuleTask == null) {
             log.debug("Configuring extractModuleInfo task for project ${project.path}")
             extractModuleTask = createExtractModuleTask(project)
@@ -124,8 +125,8 @@ abstract class ArtifactoryPluginBase implements Plugin<Project> {
         return extractModuleTask
     }
 
-    private DeployTask addDeployTask(Project project) {
-        DeployTask deployTask = project.tasks.findByName(DEPLOY_TASK_NAME)
+    private Task addDeployTask(Project project) {
+        Task deployTask = project.tasks.findByName(DEPLOY_TASK_NAME)
         if (deployTask == null) {
             log.debug("Configuring deployTask task for project ${project.path}")
             deployTask = createArtifactoryDeployTask(project)
